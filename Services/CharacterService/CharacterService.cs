@@ -8,21 +8,20 @@ public class CharacterService : ICharacterService
         new Character() { Id = 1, Name = "Sam"},
     };
 
-    public async Task<List<Character> AddCharacter(Character newCharacter)
+    public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)
     {
         characters.Add(newCharacter);
-        return characters;
+        return new ServiceResponse<List<Character>> { Data = characters };
     }
 
-    public async Task<List<Character>> GetAllCharacters()
+    public async Task<ServiceResponse<List<Character>>> GetAllCharacters()
     {
-        return characters;
+        return new ServiceResponse<List<Character>> { Data = characters };
     }
 
-    public async Task<Character> GetCharacterById(int id)
+    public async Task<ServiceResponse<Character>> GetCharacterById(int id)
     {
         var character = characters.FirstOrDefault(c => c.Id == id);
-
-        return character ?? throw new Exception("Character not found");
+        return new ServiceResponse<Character> { Data = character };;
     }
 }
