@@ -38,10 +38,53 @@ public class CharacterService : ICharacterService
 
     public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
     {
-        var character = characters.FirstOrDefault(c => c.Id == id);
-        return new ServiceResponse<GetCharacterDto> 
+        var response = new ServiceResponse<GetCharacterDto>();
+
+        try
         {
-            Data = _mapper.Map<GetCharacterDto>(character)
-        };
+            var character = characters.FirstOrDefault(c => c.Id == id);
+            
+            if (character is null)
+                throw new Exception($"Character with Id '{id}' not found.");
+
+            response.Data = _mapper.Map<GetCharacterDto>(character);
+
+        }
+        catch (Exception ex)
+        {
+            response.Success = false;
+            response.Message = ex.Message;
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+    {
+        var response = new ServiceResponse<GetCharacterDto>();
+
+        try 
+        {
+            var character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+            
+            if (character is null)
+                throw new Exception($"Character with Id '{updatedCharacter.Id}' not found.");
+
+            character.Name = updatedCharacter.Name;
+            character.HitPoints = updatedCharacter.HitPoints;
+            character.Strength = updatedCharacter.Strength;
+            character.Defense = updatedCharacter.Defense;
+            character.Intelligence = updatedCharacter.Intelligence;
+            character.Class = updatedCharacter.Class;
+
+            response.Data = _mapper.Map<GetCharacterDto>(character);
+        }
+        catch  (Exception ex)
+        {
+            response.Success = false;
+            response.Message = ex.Message;
+        }
+
+        return response;
     }
 }
