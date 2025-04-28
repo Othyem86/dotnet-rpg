@@ -6,7 +6,9 @@ public class DataContext : DbContext
     : base(options)
     {
         Characters = Set<Character>();
+        Users = Set<User>();
     }
 
     public DbSet<Character> Characters { get; }
+    public DbSet<User> Users { get; }
 }
